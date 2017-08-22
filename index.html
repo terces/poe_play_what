@@ -46,7 +46,8 @@
 	</head>
 
 	<body>
-		<div class="main">
+		<header class="center"><h2>PoE Play what? / PoE 玩什麼?</h2></header>
+		<main>
 			<div id="header" class="row center">
 				<div class="col-4">Exiles</div>
 				<div class="col-3">Ascendancy<input id="is_ascendancy" type="checkbox">Rolled?</input></div>
@@ -64,7 +65,10 @@
 			<hr>
 			<div id="logger" class="center">
 			</div>
-		</div>
+		</main>
+		<footer class="center">
+			By <a target="_blank" href="https://github.com/terces/">Terces Tsai</a>
+		</footer>
 		<script>
 			var exiles = [ 'Scion-貴族', 'Marauder-野蠻人', 'Templar-聖堂武僧', 'Witch-女巫', 'Shadow-暗影刺客', 'Ranger-遊俠', 'Duelist-決鬥者' ];
 			var ex_len = exiles.length;
@@ -222,8 +226,8 @@
 					var nd = document.createElement( 'div');
 					var logger = document.getElementById( 'logger');
 					nd.className = "row";
-					nd.innerHTML += document.querySelector( '#exiles').innerHTML + " + ";
-					nd.innerHTML += true == chk_ascendancy.checked ? ( document.querySelector( '#ascendancy').innerHTML + " + " ) : ( "" );
+					nd.innerHTML += document.querySelector( '#exiles').innerHTML;
+					nd.innerHTML += true == chk_ascendancy.checked && document.querySelector("#ascendancy").innerText.length > 0 ? ( " + " + document.querySelector( '#ascendancy').innerHTML + " + " ) : ( " + " );
 					nd.innerHTML += document.querySelector( '#skills').innerHTML;
 					if( logger.childNodes.length > 1 )
 						logger.insertBefore( nd, logger.childNodes[0]);
