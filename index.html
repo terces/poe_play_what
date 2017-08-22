@@ -1,0 +1,268 @@
+<!doctype html>
+
+<html lang="zh_tw">
+	<head>
+		<meta charset="utf-8">
+
+		<title>POE玩什麼?</title>
+		<meta name="description" content="POE PLAY WHAT?">
+		<meta name="author" content="Terces">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style>
+body {
+	width: 100%;
+}
+
+#main { 
+	width: 80%;
+}
+
+/* simple grid system for rwd */
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"] {
+	float: left;
+	padding: 15px;
+}
+
+.row::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.center { 
+	text-align: center;
+}
+
+#header {
+	font-weight: bold;
+}
+		</style>
+	</head>
+
+	<body>
+		<div class="main">
+			<div id="header" class="row center">
+				<div class="col-4">Exiles</div>
+				<div class="col-3">Ascendancy<input id="is_ascendancy" type="checkbox">Rolled?</input></div>
+				<div class="col-4">Main skill</div>
+			</div>
+			<div id="slots" class="row center">
+				<div id="exiles" class="col-4">Scion</div>
+				<div id="ascendancy" class="col-3">Ascendant</div>
+				<div id="skills" class="col-4">Fireball</div>
+			</div>
+			<div id="activator" class="row center">
+				<button id="roll" type="button">ROLL!</button>
+			</div>
+		</div>
+		<script>
+			var exiles = [ 'Scion-貴族', 'Marauder-野蠻人', 'Templar-聖堂武僧', 'Witch-女巫', 'Shadow-暗影刺客', 'Ranger-遊俠', 'Duelist-決鬥者' ];
+			var ex_len = exiles.length;
+			var ascendancy = [ [ 'None-不昇華', 'Ascendant-昇華使徒' ],
+				[ 'None-不昇華', 'Juggernaut-勇士', 'Berserker-暴徒', 'Chieftain-酋長'],
+				[ 'None-不昇華', 'Inquisitor-判官', 'Hierophant-聖宗', 'Guardian-守護者'],
+				[ 'None-不昇華', 'Necromancer-死靈師', 'Elementalist-元素使', 'Occultist-秘術家'],
+				[ 'None-不昇華', 'Assasssin-刺客', 'Saboteur-破壞者', 'Trickster-詐欺師'],
+				[ 'None-不昇華', 'Deadeye-銳眼', 'Raider-俠客', 'Pathfinder-追獵者'],
+				[ 'None-不昇華', 'Slayer-處刑者', 'Gladiator-衛士', 'Champion-冠軍']];
+			var active_skill = [
+				'Fireball-火球',
+				'Vaal Fireball-瓦爾．火球',
+				'Ice Nova-冰霜新星',
+				'Vaal Ice Nova-瓦爾．冰霜新星',
+				'Leap Slam-躍擊',
+				'Charged Dash-雷霆衝鋒',
+				'Blade Flurry-刀鋒亂舞',
+				'Sweep-橫掃',
+				'Ground Slam-裂地之擊',
+				'Vaal Ground Slam-瓦爾．裂地之擊',
+				'Cleave-劈砍',
+				'Shield Charge-重盾衝鋒',
+				'Enduring Cry-堅決戰吼',
+				'Double Strike-雙重打擊',
+				'Vaal Double Strike-瓦爾．雙重打擊',
+				'Lacerate-破空斬',
+				'Elemental Hit-元素打擊',
+				'Immortal Call-不朽怒嚎',
+				'Vaal Immortal Call-瓦爾．不朽怒嚎',
+				'Dual Strike-雙持打擊',
+				'Whirling Blades-迴旋之刃',
+				'Frenzy-狂怒',
+				'Detonate Dead-屍體爆破',
+				'Vaal Detonate Dead-瓦爾．屍體爆破',
+				'Split Arrow-分裂箭矢',
+				'Cold Snap-霜暴',
+				'Vaal Cold Snap-瓦爾．霜暴',
+				'Raise Zombie-殭屍復甦',
+				'Caustic Arrow-腐蝕箭矢',
+				'Blood Rage-鮮血狂怒',
+				'Righteous Fire-正義之火',
+				'Vaal Righteous Fire-瓦爾．正義之火',
+				'Discharge-解放',
+				'Flicker Strike-閃現打擊',
+				'Spark-電球',
+				'Vaal Spark-瓦爾．電球',
+				'Ice Spear-冰矛',
+				'Raise Spectre-喚醒幽魂',
+				'Infernal Blow-煉獄之擊',
+				'Glacial Hammer-冰霜之錘',
+				'Vaal Glacial Hammer-瓦爾．冰霜之錘',
+				'Frost Wall-冰牆',
+				'Freezing Pulse-冰霜脈衝',
+				'Shock Nova-閃電新星',
+				'Viper Strike-毒蛇打擊',
+				'Phase Run-暗影迷蹤',
+				'Explosive Arrow-爆炸箭矢',
+				'Lightning Warp-閃電傳送',
+				'Vaal Lightning Warp-瓦爾．閃電傳送',
+				'Summon Skeleton-召喚骷髏',
+				'Vaal Summon Skeletons-瓦爾．召喚骷髏',
+				'Heavy Strike-重擊',
+				'Dominating Blow-霸氣之擊',
+				'Rain of Arrows-箭雨',
+				'Vaal Rain of Arrows-瓦爾．箭雨',
+				'Firestorm-烈炎風暴',
+				'Lightning Strike-閃電打擊',
+				'Vaal Lightning Strike-瓦爾．閃電打擊',
+				'Tempest Shield-暴風之盾',
+				'Molten Shell-熔岩護盾',
+				'Vaal Molten Shell-瓦爾．熔岩護盾',
+				'Power Siphon-力量抽取',
+				'Vaal Power Siphon-瓦爾．力量抽取',
+				'Puncture-放血',
+				'Lightning Arrow-閃電箭矢',
+				'Burning Arrow-燃燒箭矢',
+				'Vaal Burning Arrow-瓦爾．燃燒箭矢',
+				'Shockwave Totem-震波圖騰',
+				'Freeze Mine-冰凍地雷',
+				'Conversion Trap-迷魅陷阱',
+				'Bear Trap-捕熊陷阱',
+				'Fire Trap-火焰陷阱',
+				'Ethereal Knives-虛空匕首',
+				'Ice Shot-冰霜射擊',
+				'Arctic Breath-極地吐息',
+				'Arc-電弧',
+				'Vaal Arc-瓦爾．電弧',
+				'Arctic Armour-極地裝甲',
+				'Flame Totem-火舌圖騰',
+				'Storm Burst-風爆',
+				'Incinerate-燒毀',
+				'Cyclone-旋風斬',
+				'Vaal Cyclone-瓦爾．旋風斬',
+				'Searing Bond-灼熱連結',
+				'Reave-衝擊波',
+				'Vaal Reave-瓦爾．衝擊波',
+				'Lightning Trap-閃電陷阱',
+				'Vaal Lightning Trap-瓦爾．閃電陷阱',
+				'Animate Guardian-幻化守衛',
+				'Spectral Throw-靈體投擲',
+				'Vaal Spectral Throw-瓦爾．靈體投擲',
+				'Animate Weapon-幻化武器',
+				'Storm Call-風暴呼喚',
+				'Vaal Storm Call-瓦爾．風暴呼喚',
+				'Flameblast-烈焰爆破',
+				'Vaal Flameblast-瓦爾．烈焰爆破',
+				'Barrage-彈幕',
+				'Ball Lightning-天雷之珠',
+				'Summon Raging Spirit-召喚憤怒狂靈',
+				'Flame Surge-怒焰奔騰',
+				'Desecrate-褻瀆',
+				'Flesh Offering-血肉奉獻',
+				'Bone Offering-骸骨奉獻',
+				'Spirit Offering-靈魂奉獻',
+				'Glacial Cascade-冰川之刺',
+				'Molten Strike-熔岩之擊',
+				'Convocation-號召',
+				'Fire Nova Mine-火焰新星地雷',
+				'Tornado Shot-龍捲射擊',
+				'Herald of Ash-灰燼之捷',
+				'Herald of Ice-冰霜之捷',
+				'Herald of Thunder-閃電之捷',
+				'Lightning Tendrils-電能釋放',
+				'Kinetic Blast-力量爆破',
+				'Blink Arrow-閃現射擊',
+				'Mirror Arrow-魅影射擊',
+				'Riposte-擊刃',
+				'Reckoning-清算',
+				'Static Strike-充能打擊',
+				'Vengeance-復仇',
+				'Summon Chaos Golem-召喚混沌魔像',
+				'Summon Ice Golem-召喚寒冰魔像',
+				'Summon Flame Golem-召喚烈焰魔像',
+				'Summon Lightning Golem-召喚閃電魔像',
+				'Ice Crash-寒冰衝擊',
+				'Rallying Cry-激勵戰吼',
+				'Abyssal Cry-深淵戰吼',
+				'Flame Dash-烈焰衝刺',
+				'Vigilant Strike-戒備打擊',
+				'Frost Blades-冰霜之刃',
+				'Magma Orb-熔岩之核',
+				'Wild Strike-野性打擊',
+				'Ice Trap-冰凍陷阱',
+				'Blast Rain-爆裂箭雨',
+				'Shrapnel Shot-流星射擊',
+				'Bladefall-虛空刀雨',
+				'Blade Vortex-飛刃風暴',
+				'Frost Bomb-寒霜爆',
+				'Siege Ballista-攻城炮台',
+				'Orb of Storms-風暴漩渦',
+				'Summon Stone Golem-召喚巨石魔像',
+				'Earthquake-震地',
+				'Contagion-瘟疫',
+				'Wither-死亡凋零',
+				'Blight-萎滅',
+				'Essence Drain-靈魂吸取',
+				'Ancestral Protector-先祖衛士',
+				'Ancestral Warchief-先祖戰士長',
+				'Sunder-大地震擊',
+				'Frostbolt-寒冰彈',
+				'Vortex-旋渦',
+				'Dark Pact-暗夜血契',
+				'Scorching Ray-熾灼奔流'];
+			var as_len = active_skill.length;
+			var roller = document.querySelector('button#roll');
+			roller.onclick = function() {
+				var chk_ascendancy = document.querySelector('#is_ascendancy');
+				if( chk_ascendancy.checked != true) {
+					// roll exiles/skills
+					var rad_exile = Math.round( Math.random() * ex_len);
+					rad_exile = rad_exile == ex_len ? ex_len - 1 : rad_exile;
+					var rad_skill = Math.round( Math.random() * as_len);
+					rad_skill = rad_skill == as_len ? as_len - 1 : rad_skill;
+					document.querySelector('#exiles').innerHTML = exiles[rad_exile];
+					document.querySelector('#ascendancy').innerHTML = '';
+					document.querySelector('#skills').innerHTML = active_skill[rad_skill];
+				}
+				else {
+					// roll exiles/ascendancy/skills
+					var rad_exile = Math.round( Math.random() * ex_len);
+					rad_exile = rad_exile == ex_len ? ex_len - 1 : rad_exile;
+					var ad_len = 4;
+					if( 0 == rad_exile ) // scion
+						ad_len = 2;
+					var rad_ascendancy = Math.round( Math.random() * ad_len);
+					rad_ascendancy = rad_ascendancy == ad_len ? ad_len - 1 : rad_ascendancy;
+					var rad_skill = Math.round( Math.random() * as_len);
+					rad_skill = rad_skill == as_len ? as_len - 1 : rad_skill;
+					document.querySelector('#exiles').innerHTML = exiles[rad_exile];
+					document.querySelector('#ascendancy').innerHTML = ascendancy[rad_exile][rad_ascendancy];
+					document.querySelector('#skills').innerHTML = active_skill[rad_skill];
+				}
+			};
+		</script>
+	</body>
+</html>
