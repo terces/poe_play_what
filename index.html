@@ -10,14 +10,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<style>
-body {
-	width: 100%;
-}
-
-#main { 
-	width: 80%;
-}
-
 /* simple grid system for rwd */
 .col-1 {width: 8.33%;}
 .col-2 {width: 16.66%;}
@@ -43,7 +35,7 @@ body {
 	display: table;
 }
 
-.center { 
+.center {
 	text-align: center;
 }
 
@@ -67,6 +59,9 @@ body {
 			</div>
 			<div id="activator" class="row center">
 				<button id="roll" type="button">ROLL!</button>
+			</div>
+			<hr>
+			<div id="logger" class="center">
 			</div>
 		</div>
 		<script>
@@ -96,8 +91,6 @@ body {
 				'Vaal Double Strike-瓦爾．雙重打擊',
 				'Lacerate-破空斬',
 				'Elemental Hit-元素打擊',
-				'Immortal Call-不朽怒嚎',
-				'Vaal Immortal Call-瓦爾．不朽怒嚎',
 				'Dual Strike-雙持打擊',
 				'Whirling Blades-迴旋之刃',
 				'Frenzy-狂怒',
@@ -108,7 +101,6 @@ body {
 				'Vaal Cold Snap-瓦爾．霜暴',
 				'Raise Zombie-殭屍復甦',
 				'Caustic Arrow-腐蝕箭矢',
-				'Blood Rage-鮮血狂怒',
 				'Righteous Fire-正義之火',
 				'Vaal Righteous Fire-瓦爾．正義之火',
 				'Discharge-解放',
@@ -179,23 +171,15 @@ body {
 				'Ball Lightning-天雷之珠',
 				'Summon Raging Spirit-召喚憤怒狂靈',
 				'Flame Surge-怒焰奔騰',
-				'Desecrate-褻瀆',
-				'Flesh Offering-血肉奉獻',
-				'Bone Offering-骸骨奉獻',
-				'Spirit Offering-靈魂奉獻',
 				'Glacial Cascade-冰川之刺',
 				'Molten Strike-熔岩之擊',
-				'Convocation-號召',
 				'Fire Nova Mine-火焰新星地雷',
 				'Tornado Shot-龍捲射擊',
 				'Lightning Tendrils-電能釋放',
 				'Kinetic Blast-力量爆破',
 				'Blink Arrow-閃現射擊',
 				'Mirror Arrow-魅影射擊',
-				'Riposte-擊刃',
-				'Reckoning-清算',
 				'Static Strike-充能打擊',
-				'Vengeance-復仇',
 				'Summon Chaos Golem-召喚混沌魔像',
 				'Summon Ice Golem-召喚寒冰魔像',
 				'Summon Flame Golem-召喚烈焰魔像',
@@ -230,8 +214,21 @@ body {
 				'Scorching Ray-熾灼奔流'];
 			var as_len = active_skill.length;
 			var roller = document.querySelector('button#roll');
+			var first_try = true;
 			roller.onclick = function() {
 				var chk_ascendancy = document.querySelector('#is_ascendancy');
+				if( !first_try) {
+					var nd = document.createElement( 'div');
+					var logger = document.getElementById( 'logger');
+					nd.className = "row";
+					nd.innerHTML += document.querySelector( '#exiles').innerHTML + " + ";
+					nd.innerHTML += true == chk_ascendancy.checked ? ( document.querySelector( '#ascendancy').innerHTML + " + " ) : ( "" );
+					nd.innerHTML += document.querySelector( '#skills').innerHTML;
+					if( logger.childNodes.length > 1 )
+						logger.insertBefore( nd, logger.childNodes[0]);
+					else
+						logger.appendChild( nd);
+				}
 				if( chk_ascendancy.checked != true) {
 					// roll exiles/skills
 					var rad_exile = Math.round( Math.random() * ex_len);
@@ -257,6 +254,7 @@ body {
 					document.querySelector('#ascendancy').innerHTML = ascendancy[rad_exile][rad_ascendancy];
 					document.querySelector('#skills').innerHTML = active_skill[rad_skill];
 				}
+				first_try = false;
 			};
 		</script>
 	</body>
