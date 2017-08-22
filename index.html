@@ -59,6 +59,7 @@
 			</div>
 			<div id="activator" class="row center">
 				<button id="roll" type="button">ROLL!</button>
+				<button id="clear" type="button">Clear Log</button>
 			</div>
 			<hr>
 			<div id="logger" class="center">
@@ -255,6 +256,11 @@
 					document.querySelector('#skills').innerHTML = active_skill[rad_skill];
 				}
 				first_try = false;
+			};
+			var clr = document.getElementById('clear');
+			clr.onclick = function() {
+				if( true == window.confirm('確定要清除紀錄?') )
+					document.getElementById('logger').innerHTML = '';
 			};
 		</script>
 	</body>
