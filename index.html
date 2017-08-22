@@ -9,66 +9,56 @@
 		<meta name="author" content="Terces">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+		<!--Import Google Icon Font-->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<!--Import materialize.css-->
+		<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css"  media="screen,projection"/>
+
 		<style>
-/* simple grid system for rwd */
-.col-1 {width: 8.33%;}
-.col-2 {width: 16.66%;}
-.col-3 {width: 25%;}
-.col-4 {width: 33.33%;}
-.col-5 {width: 41.66%;}
-.col-6 {width: 50%;}
-.col-7 {width: 58.33%;}
-.col-8 {width: 66.66%;}
-.col-9 {width: 75%;}
-.col-10 {width: 83.33%;}
-.col-11 {width: 91.66%;}
-.col-12 {width: 100%;}
+			body {
+				display: flex;
+				min-height: 100vh;
+				flex-direction: column;
+			}
 
-[class*="col-"] {
-	float: left;
-	padding: 15px;
-}
-
-.row::after {
-	content: "";
-	clear: both;
-	display: table;
-}
-
-.center {
-	text-align: center;
-}
-
-#header {
-	font-weight: bold;
-}
+			main {
+				flex: 1 0 auto;
+			}
 		</style>
 	</head>
 
 	<body>
-		<header class="center"><h2>PoE Play what? / PoE 玩什麼?</h2></header>
+		<header>
+			<div class="container">
+				<div class="row right-align">By <a target="_blank" href="https://github.com/terces/">Terces Tsai</a></div>
+				<div class="row center-align"><h2>PoE Play what? / PoE 玩什麼?</h2></div>
+			</div>
 		<main>
-			<div id="header" class="row center">
-				<div class="col-4">Exiles</div>
-				<div class="col-3">Ascendancy<input id="is_ascendancy" type="checkbox">Rolled?</input></div>
-				<div class="col-4">Main skill</div>
-			</div>
-			<div id="slots" class="row center">
-				<div id="exiles" class="col-4">Scion-貴族</div>
-				<div id="ascendancy" class="col-3">Ascendant-昇華使徒</div>
-				<div id="skills" class="col-4">Fireball-火球</div>
-			</div>
-			<div id="activator" class="row center">
-				<button id="roll" type="button">ROLL!</button>
-				<button id="clear" type="button">Clear Log</button>
-			</div>
-			<hr>
-			<div id="logger" class="center">
+			<div class="container">
+				<div id="header" class="row center-align">
+					<div class="col s12 m4">Exiles</div>
+					<div class="col s12 m4">
+						<input id="is_ascendancy" type="checkbox" />
+						<label for="is_ascendancy">Ascendancy</label>
+					</div>
+					<div class="col s12 m4">Main skill</div>
+				</div>
+				<div id="slots" class="row center-align">
+					<div id="exiles" class="col s12 m4">Scion-貴族</div>
+					<div id="ascendancy" class="col s12 m4">Ascendant-昇華使徒</div>
+					<div id="skills" class="col s12 m4">Fireball-火球</div>
+				</div>
+				<div id="activator" class="row center-align">
+					<button id="roll" class="btn" type="button">ROLL!</button>
+					<button id="clear" class="btn" type="button">Clear Log</button>
+				</div>
+				<div class="divider"></div>
+				<div id="logger" class="center-align">
+				</div>
 			</div>
 		</main>
-		<footer class="center">
-			By <a target="_blank" href="https://github.com/terces/">Terces Tsai</a>
-		</footer>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
 		<script>
 			var exiles = [ 'Scion-貴族', 'Marauder-野蠻人', 'Templar-聖堂武僧', 'Witch-女巫', 'Shadow-暗影刺客', 'Ranger-遊俠', 'Duelist-決鬥者' ];
 			var ex_len = exiles.length;
