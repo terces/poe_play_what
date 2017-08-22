@@ -227,7 +227,7 @@
 					var logger = document.getElementById( 'logger');
 					nd.className = "row";
 					nd.innerHTML += document.querySelector( '#exiles').innerHTML;
-					nd.innerHTML += true == chk_ascendancy.checked && document.querySelector("#ascendancy").innerText.length > 0 ? ( " + " + document.querySelector( '#ascendancy').innerHTML + " + " ) : ( " + " );
+					nd.innerHTML += document.querySelector("#ascendancy").innerText.length > 0 ? ( " + " + document.querySelector( '#ascendancy').innerHTML + " + " ) : ( " + " );
 					nd.innerHTML += document.querySelector( '#skills').innerHTML;
 					if( logger.childNodes.length > 1 )
 						logger.insertBefore( nd, logger.childNodes[0]);
